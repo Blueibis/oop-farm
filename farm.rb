@@ -55,7 +55,7 @@ attr_reader :name, :sum
   def add_field
     puts "What kind of field are you adding: corn, wheat or potato?"
     input = gets.chomp
-    add_error if input != "corn" && input != "wheat" && != "potato"
+    return add_error if input != "corn" && input != "wheat" && input != "potato"
     puts "How large is your field in hectares?"
     size_input = gets.to_i
     if input == "corn"

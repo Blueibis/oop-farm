@@ -6,7 +6,7 @@ class Potato < Crop
 
   def initialize(hectares)
     super(hectares)
-    @yield = hectares * 20
+    @yield = hectares * 10
     @type = "potato"
   end
 

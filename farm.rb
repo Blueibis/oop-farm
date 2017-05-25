@@ -1,5 +1,6 @@
 require_relative 'corn'
 require_relative 'wheat'
+require_relative 'potato'
 
 class Farm
 @@fields = []
@@ -52,16 +53,23 @@ attr_reader :name, :sum
   end
 
   def add_field
-    puts "What kind of field are you adding: corn or wheat?"
+    puts "What kind of field are you adding: corn, wheat or potato?"
     input = gets.chomp
-    add_error if input != "corn" && input != "wheat"
+    add_error if input != "corn" && input != "wheat" && != "potato"
     puts "How large is your field in hectares?"
     size_input = gets.to_i
     if input == "corn"
       store(Corn.new(size_input))
-    else store(Wheat.new(size_input))
+    elsif input == "wheat"
+      store(Wheat.new(size_input))
+    else
+      store(Potato.new(size_input))
     end
     puts "Added a #{input} field of #{size_input} hectares!"
+  end
+
+  def add_error
+    puts "We can't plant that kind of field boss."
   end
 
   def harvested
@@ -93,7 +101,7 @@ attr_reader :name, :sum
     quotes = ["A golden glow spread across the sky as the sun chased the dark clouds away above your #{hectares} hectare field.",
       "It was a blindingly hot day and the humidity in the air was stifling.\nContinuing to admire your #{hectares} hectares of #{type} might give you heat stroke.",
       "The sun hangs low, casting an orange glow on a sea of #{hectares} hectares of #{type}.",
-      "#{hectares} hectares of #{type} stalks rustling in the breeze fill your horizon.",
+      "#{hectares} hectares of #{type} rustling in the breeze fill your horizon.",
       "Would'nt you rather be admiring your #{hectares} hectare field from behind some windows?",
       "Your fields are beautiful and so are you. Can we get back to work now?",
       "The setting sun sets a beautiful golden backdrop over the horizon as you rest among your #{type} fields.",

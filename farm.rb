@@ -1,11 +1,12 @@
 require_relative 'corn'
 require_relative 'wheat'
 require_relative 'potato'
+require_relative 'pasture'
 
 class Farm
 @@fields = []
-
 attr_reader :name, :sum
+attr_writer :pasture
 
   def initialize(name)
     @name = name
@@ -36,6 +37,7 @@ attr_reader :name, :sum
     puts "harvest -> harvests crops"
     puts "status -> displays information"
     puts "relax -> enjoy the scenery"
+    puts "REDACTED -> REDACTED the animals!"
     puts "exit -> exits the program"
     puts "---------------------"
   end
@@ -48,14 +50,20 @@ attr_reader :name, :sum
     when "relax" then relax
     when "exit" then puts "Exiting the program..."
       exit
+    when "free the animals" then free_the_animals
     else puts "There's no option for that."
     end
   end
 
   def add_field
-    puts "What kind of field are you adding: corn, wheat or potato?"
+    puts "What kind of field are you adding: corn, wheat, potato or a pasture?"
     input = gets.chomp
-    return add_error if input != "corn" && input != "wheat" && input != "potato"
+    if input.include?("pasture")
+      return add_pasture
+    elsif input != "corn" && input != "wheat" && input != "potato"
+      return add_error
+     else
+     end
     puts "How large is your field in hectares?"
     size_input = gets.to_i
     if input == "corn"
@@ -66,6 +74,13 @@ attr_reader :name, :sum
       store(Potato.new(size_input))
     end
     puts "Added a #{input} field of #{size_input} hectares!"
+  end
+
+  def add_pasture
+    puts "How many animals are you adding to your pasture?"
+    result = gets.to_i
+     @pasture = Pasture.new(result)
+    puts "Added #{result} animals to your pasture."
   end
 
   def add_error
@@ -82,12 +97,19 @@ attr_reader :name, :sum
       puts "Harvesting #{crop.yield} food from #{crop.hectares} hectare #{crop.type} field."
     end
     harvested
+    harvest_pasture
+  end
+
+  def harvest_pasture
+    @pasture.amount += Random.rand(@pasture.amount)
+    puts "Your animals have breeded, now you have #{@pasture.amount} animals."
   end
 
   def status
     @@fields.each do |crop|
       puts "#{crop.type.capitalize} field is #{crop.hectares} hectares."
     end
+    puts "You have #{@pasture.amount} animals in your pasture."
     harvested
   end
 
@@ -95,6 +117,7 @@ attr_reader :name, :sum
       @@fields.each do |crop|
         puts relax_quote(crop.hectares, crop.type)
       end
+      puts "You may or may not have animals in your pasture to admire.\nThe smell keeps you from admiring them."
   end
 
   def relax_quote(hectares, type)
@@ -107,5 +130,10 @@ attr_reader :name, :sum
       "The setting sun sets a beautiful golden backdrop over the horizon as you rest among your #{type} fields.",
       "You take a minute to breath in the crisp autumn air and admire the rolling fields of gold in front of you."]
       quotes.sample
+    end
+
+    def free_the_animals
+      @pasture.amount = 0
+      puts "Someone forgot to remove the secret option to free the animals! You now have #{@pasture.amount} animals."
     end
 end
